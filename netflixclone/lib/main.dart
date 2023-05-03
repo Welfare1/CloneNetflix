@@ -1,8 +1,14 @@
 import 'package:flutter/material.dart';
-import 'HomePage.dart';
+import 'package:netflixclone/service/data_repository.dart';
+import 'widgets/HomePage.dart';
+import 'package:provider/provider.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(ChangeNotifierProvider(
+    create: (context) => DataRepository(),
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {
@@ -12,9 +18,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
-      theme: ThemeData.dark(),
-      home: const HomePage(),
-    );
+        debugShowCheckedModeBanner: false,
+        title: 'Flutter Demo',
+        theme: ThemeData.dark(),
+        home: AnimatedSplashScreen(
+            duration: 3000,
+            splash: "assets/images/netflix_logo_1.png",
+            nextScreen: const HomePage(),
+            splashTransition: SplashTransition.slideTransition,
+            // pageTransitionType: PageTransitionType.scale,
+            animationDuration: const Duration(milliseconds: 2000),
+            backgroundColor: Colors.black));
   }
 }

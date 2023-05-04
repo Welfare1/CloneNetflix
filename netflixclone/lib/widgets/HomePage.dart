@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:netflixclone/service/api_service.dart';
 import 'package:netflixclone/service/movie.dart';
+import 'package:provider/provider.dart';
+import 'package:netflixclone/service/data_repository.dart';
+import 'constant_color.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -11,27 +14,14 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  List<Movie>? movies;
-  var ok = [
-    {"1": 0}
-  ];
   @override
   void initState() {
     super.initState();
-    getMovies();
-  }
-
-  getMovies() {
-    APIService().getPopularMovies(pageNumber: 1).then((movieList) {
-      //Calling API
-      setState(() {
-        movies = movieList;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
+    final dataRepository = Provider.of<DataRepository>(context);
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: AppBar(
@@ -70,10 +60,10 @@ class _HomePageState extends State<HomePage> {
         children: [
           Container(
               height: 500,
-              child: movies == null
+              child: dataRepository.popularMovieList.isEmpty
                   ? const Center()
                   : Image.network(
-                      movies![19].posterUrl(),
+                      dataRepository.popularMovieList[19].posterUrl(),
                       fit: BoxFit.cover,
                     )),
           const SizedBox(
@@ -94,10 +84,11 @@ class _HomePageState extends State<HomePage> {
                     color: Colors.amber,
                     child: Container(
                         height: 500,
-                        child: movies == null
+                        child: dataRepository.popularMovieList.isEmpty
                             ? const Center()
                             : Image.network(
-                                movies![index].posterUrl(),
+                                dataRepository.popularMovieList[index]
+                                    .posterUrl(),
                                 fit: BoxFit.cover,
                               )),
                   );

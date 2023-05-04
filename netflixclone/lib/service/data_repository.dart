@@ -13,15 +13,20 @@ class DataRepository with ChangeNotifier {
 
   List<Movie> get popularMovieList => _popularMovieList;
 
-  // Future<Movie> getPopularMovies() async {
-  //   try {
-  //     List<Movie> movies =
-  //         await apiService.getPopularMovies(pageNumber: _popularMoviePageIndex);
-  //     _popularMovieList.addAll(movies);
-  //     _popularMoviePageIndex++;
-  //   } on Response catch (response) {
-  //     print("ERROR: ${response.statusCode}");
-  //     rethrow;
-  //   }
-  // }
+  Future<void> getPopularMovies() async {
+    try {
+      List<Movie> movies =
+          await apiService.getPopularMovies(pageNumber: _popularMoviePageIndex);
+      _popularMovieList.addAll(movies);
+      _popularMoviePageIndex++;
+      notifyListeners();
+    } on Response catch (response) {
+      print("ERROR: ${response.statusCode}");
+      rethrow;
+    }
+  }
+
+  Future<void> initData() async {
+    await getPopularMovies();
+  }
 }
